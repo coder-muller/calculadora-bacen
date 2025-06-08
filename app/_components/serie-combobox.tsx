@@ -15,6 +15,14 @@ interface SerieComboboxProps {
   className?: string;
 }
 
+// Função para normalizar strings removendo acentos e convertendo para lowercase
+const normalizeString = (str: string): string => {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, ''); // Remove diacríticos
+};
+
 export function SerieCombobox({ value, onSerieSelect, className }: SerieComboboxProps) {
   const [open, setOpen] = useState(false);
   
@@ -23,6 +31,13 @@ export function SerieCombobox({ value, onSerieSelect, className }: SerieCombobox
   const handleSerieSelect = (serie: typeof seriesData[0]) => {
     onSerieSelect(serie);
     setOpen(false);
+  };
+
+  // Função de filtro customizada que ignora case e acentos
+  const customFilter = (value: string, search: string) => {
+    const normalizedValue = normalizeString(value);
+    const normalizedSearch = normalizeString(search);
+    return normalizedValue.includes(normalizedSearch) ? 1 : 0;
   };
 
   return (
@@ -44,7 +59,7 @@ export function SerieCombobox({ value, onSerieSelect, className }: SerieCombobox
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-full p-0" style={{ width: 'var(--radix-popover-trigger-width)' }}>
-            <Command>
+            <Command filter={customFilter}>
               <CommandInput placeholder="Pesquisar série..." />
               <CommandEmpty>Nenhuma série encontrada.</CommandEmpty>
               <CommandList>
