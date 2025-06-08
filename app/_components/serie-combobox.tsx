@@ -62,8 +62,8 @@ export function SerieCombobox({ value, onSerieSelect, className }: SerieCombobox
                         )}
                       />
                       <div className="flex flex-col">
-                        <span className="font-medium">{serie.codigo}</span>
-                        <span className="text-sm text-muted-foreground">{serie.descricao}</span>
+                        <span className="text-sm font-medium">{serie.descricao}</span>
+                        <span className="text-muted-foreground text-xs">{serie.codigo}</span>
                       </div>
                     </CommandItem>
                   ))}

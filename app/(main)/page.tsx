@@ -14,7 +14,7 @@ export default function Home() {
       <div className="absolute top-4 left-4">
         <div className="flex items-center gap-2">
           <PercentCircle className="w-7 h-7" />
-          <Label className="text-xl font-bold">Calculadora de Taxas</Label>
+          <Label className="text-xl font-bold">Calculadora de Taxas Contratuais</Label>
         </div>
       </div>
       <div className="absolute top-4 right-4">
@@ -24,15 +24,15 @@ export default function Home() {
       <Card className="hidden lg:block w-full max-w-5xl">
         <CardHeader className="flex items-center justify-between">
           <div>
-            <CardTitle>Calculadora de Taxas</CardTitle>
-            <CardDescription>Calcule as taxas contratuais de acordo com o valor do contrato.</CardDescription>
+            <CardTitle>Calculadora de Taxas Contratuais</CardTitle>
+            <CardDescription>Calcule a validade contratual de acordo com a taxa do BACEN.</CardDescription>
           </div>
         </CardHeader>
         <CardContent className="mt-4">
           <Tabs defaultValue="serie" className="w-full">
             <TabsList className="w-full">
-              <TabsTrigger value="serie">Com a Série</TabsTrigger>
-              <TabsTrigger value="juros">Com os Juros</TabsTrigger>
+              <TabsTrigger value="serie">Calcular com a Série</TabsTrigger>
+              <TabsTrigger value="juros">Calcular com a Taxa</TabsTrigger>
             </TabsList>
 
             <TabsContent value="serie">
@@ -45,6 +45,12 @@ export default function Home() {
           </Tabs>
         </CardContent>
       </Card>
+
+      <div className="absolute bottom-4 right-4">
+        <Label className="text-xs text-muted-foreground flex items-center gap-1">
+          Feito com ❤️ por <a href="https://github.com/coder-muller" target="_blank" rel="noopener noreferrer" className="hover:underline">Guilherme Müller</a>
+        </Label>
+      </div>
     </div>
   );
 }
