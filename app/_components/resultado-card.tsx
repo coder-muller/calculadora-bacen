@@ -18,7 +18,7 @@ export function ResultadoCard({
 }: ResultadoCardProps) {
   const limite = taxaBase * 1.3;
 
-  const porcentagemAcima = (taxaAnalise - limite) / limite * 100;
+  const porcentagemAcima = (taxaAnalise - taxaBase) / taxaBase * 100;
 
   return (
     <div className="space-y-4">
