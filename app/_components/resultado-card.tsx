@@ -32,7 +32,7 @@ export function ResultadoCard({
           <Label className="text-sm text-muted-foreground">Taxa Análise</Label>
           <span className="text-lg font-semibold flex items-center gap-1">
             {taxaAnalise.toFixed(2)}%
-            {taxaAnalise > limite && (
+            {taxaAnalise > taxaBase && (
               <span className="text-sm text-muted-foreground ml-1">
                 (+{porcentagemAcima.toFixed(2)}%)
               </span>
