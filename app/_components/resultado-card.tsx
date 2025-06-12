@@ -2,6 +2,7 @@
 
 import { Label } from "@/components/ui/label";
 import { Check, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ResultadoCardProps {
   taxaBase: number;
@@ -16,8 +17,18 @@ export function ResultadoCard({
   isProcedente,
   labelTaxaBase = "Taxa Base"
 }: ResultadoCardProps) {
-  const limite = taxaBase * 1.3;
+  const [maxTaxa, setMaxTaxa] = useState<string>("30");
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedMaxTaxa = localStorage.getItem("maxTaxa");
+      if (storedMaxTaxa) {
+        setMaxTaxa(storedMaxTaxa);
+      }
+    }
+  }, []);
+
+  const limite = taxaBase * (1 + Number(maxTaxa) / 100);
   const porcentagemAcima = (taxaAnalise - taxaBase) / taxaBase * 100;
 
   return (
@@ -40,7 +51,7 @@ export function ResultadoCard({
           </span>
         </div>
         <div className="flex flex-col gap-1 items-end">
-          <Label className="text-sm text-muted-foreground">Limite (30%)</Label>
+          <Label className="text-sm text-muted-foreground">Limite ({maxTaxa}%)</Label>
           <span className="text-lg font-semibold">{limite.toFixed(2)}%</span>
         </div>
       </div>

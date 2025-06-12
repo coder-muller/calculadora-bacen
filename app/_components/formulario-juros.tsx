@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Calculator, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResultadoCard } from "./resultado-card";
+import { toast } from "sonner";
 
 const formSchema = z.object({
     taxaBase: z.number().min(0.01, { message: "Taxa base deve ser maior que 0,01%" }),
@@ -20,11 +21,23 @@ type FormData = z.infer<typeof formSchema>;
 export function FormularioJuros() {
     const [taxaBaseDisplay, setTaxaBaseDisplay] = useState("0,00");
     const [taxaAnaliseDisplay, setTaxaAnaliseDisplay] = useState("0,00");
+    const [maxTaxa, setMaxTaxa] = useState<string>("30");
     const [resultado, setResultado] = useState<{
         taxaBase: number;
         taxaAnalise: number;
         isProcedente: boolean;
     } | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedMaxTaxa = localStorage.getItem("maxTaxa");
+            if (storedMaxTaxa) {
+                setMaxTaxa(storedMaxTaxa);
+            } else {
+                toast.error("Não foi possível carregar as configurações");
+            }
+        }
+    }, []);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -35,7 +48,7 @@ export function FormularioJuros() {
     });
 
     const handleCalculate = (data: FormData) => {
-        const taxaLimite = data.taxaBase * 1.3; // 30% a mais que a taxa base
+        const taxaLimite = data.taxaBase * (1 + Number(maxTaxa) / 100);
         const isProcedente = data.taxaAnalise <= taxaLimite;
 
         setResultado({

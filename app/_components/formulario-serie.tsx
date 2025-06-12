@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Calculator, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,6 +30,18 @@ export function FormularioSerie() {
     const [mesAnoDisplay, setMesAnoDisplay] = useState("");
     const [taxa, setTaxa] = useState<number | null>(null);
     const [isProcedente, setIsProcedente] = useState<boolean>(false);
+    const [maxTaxa, setMaxTaxa] = useState<string>("30");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedMaxTaxa = localStorage.getItem("maxTaxa");
+            if (storedMaxTaxa) {
+                setMaxTaxa(storedMaxTaxa);
+            } else {
+                toast.error("Não foi possível carregar as configurações");
+            }
+        }
+    }, []);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -71,7 +83,7 @@ export function FormularioSerie() {
             const taxaApi = parseFloat(taxaResponse[0].valor);
             setTaxa(taxaApi);
 
-            const taxaLimite = taxaApi * 1.3;
+            const taxaLimite = taxaApi * (1 + Number(maxTaxa) / 100);
             setIsProcedente(data.taxaAnalise <= taxaLimite);
 
         } catch (error: unknown) {
